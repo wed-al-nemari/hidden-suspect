@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ملف القضية: المشتبه به الخفي | الذكاء الاصطناعي كما أراه</title>
+<meta name="description" content="لغز تحقيق تفاعلي لكشف هوية المشتبه به الخفي الذي يعمل في تفاصيل حياتنا اليومية: الذكاء الاصطناعي.">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0e12;--pap:#e9e1cc;--pin:#1a2128;--line:#2c3a45;--amb:#fbbf24;--teal:#2dd4bf;--red:#f43f5e;--ink:#f1f5f9;--mut:#9fb0bd}
+*{box-sizing:border-box;margin:0}
+body{font-family:Cairo,"Segoe UI",Tahoma,Arial,sans-serif;background:repeating-linear-gradient(0deg,#ffffff05 0 1px,transparent 1px 4px),radial-gradient(circle at 50% -20%,#14532d33,transparent 50%),var(--bg);color:var(--ink);line-height:1.9;font-size:17px;min-height:100vh;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--teal);word-break:break-all}
+:focus-visible{outline:3px solid var(--amb);outline-offset:3px}
+.screen{max-width:780px;margin:auto;padding:26px 18px 60px;display:flex;flex-direction:column;gap:16px;min-height:100vh;justify-content:center;animation:in .5s ease both}
+.screen[hidden]{display:none}
+@keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+h1{font-size:clamp(38px,9vw,64px);font-weight:800;line-height:1.25;outline:0}
+h2{font-size:clamp(24px,5.4vw,34px);font-weight:800;line-height:1.35;outline:0}
+.lbl{color:var(--amb);font-weight:700;font-size:15px;letter-spacing:.3px}
+.lead{font-size:clamp(18px,3.2vw,21px);color:#e2e8f0}
+.stamp{align-self:flex-start;border:3px solid var(--red);color:var(--red);font-weight:800;padding:0 16px;border-radius:6px;transform:rotate(-4deg);font-size:22px;animation:st .5s .3s both}
+@keyframes st{from{transform:scale(2.2) rotate(-12deg);opacity:0}to{transform:rotate(-4deg);opacity:1}}
+.paper{background:var(--pap);color:#1b1b1b;border-radius:6px;padding:18px 20px;box-shadow:0 10px 30px #0009;border-inline-start:8px solid var(--amb)}
+.paper b{color:#7c2d12}
+.box{background:var(--pin);border:1px solid var(--line);border-radius:14px;padding:18px}
+.btn{align-self:flex-start;background:var(--amb);color:#1a1200;border:0;border-radius:10px;padding:12px 26px;min-height:48px;font-weight:800;font-size:18px;box-shadow:0 6px 0 #92700e;transition:transform .12s,box-shadow .12s}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #92700e}
+.btn.g{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.btn.g:active{transform:scale(.96)}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.clue{text-align:right;background:var(--pin);border:1px dashed var(--line);border-radius:14px;padding:16px;min-height:110px;transition:.2s}
+.clue b{font-size:19px;display:block}
+.clue .m{display:none;color:#dbe7ee;font-size:16px;margin-top:6px}
+.clue[aria-expanded=true]{border:1px solid var(--teal);background:#0f2a2a}
+.clue[aria-expanded=true] .m{display:block}
+.fold{position:relative;text-align:right;background:var(--pap);color:#1b1b1b;border-radius:4px 14px 8px 8px;padding:34px 16px 14px;box-shadow:0 8px 20px #0008;transition:transform .2s}
+.fold::before{content:"";position:absolute;top:0;inset-inline-start:0;width:46%;height:20px;background:#d4c9a5;border-radius:4px 10px 0 0}
+.fold:hover{transform:translateY(-4px) rotate(-1deg)}
+.fold b{font-size:20px;display:block}
+.fold small{color:#555}
+.fold.done{background:#c7e8dc}
+.fold .ok{color:#065f46;font-weight:800;font-size:15px}
+.bar{height:10px;border-radius:9px;background:#fff2;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--amb),var(--teal));transition:width .5s}
+.opt{text-align:right;background:transparent;border:1px solid var(--line);border-radius:12px;padding:12px 16px;min-height:48px;font-weight:600}
+.opt:hover{border-color:var(--amb)}
+.res{margin-top:10px;border-radius:10px;padding:10px 14px;background:#0005}
+.res:empty{display:none}
+.res.good{border-inline-start:4px solid var(--teal)}
+.res.bad{border-inline-start:4px solid var(--red)}
+.note{font-size:14px;color:var(--mut);border-inline-start:3px solid var(--amb);padding-inline-start:10px}
+.conf{margin:10px 0}
+.conf .bar i{background:var(--red);width:96%}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.top .btn{padding:6px 16px;min-height:42px;font-size:16px;box-shadow:none}
+.sum{display:grid;gap:8px}
+.sum div{display:flex;gap:10px;align-items:center;font-weight:700}
+.sum i{font-style:normal;background:var(--teal);color:#013;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;flex:none}
+[hidden]{display:none!important}
+li{margin:10px 0}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* Cinematic case file theme — live text and controls, photographic evidence. */
+.sound-toggle{position:fixed;bottom:16px;left:16px;z-index:20;background:#121a1ef2;color:#f0dab0;border:1px solid #ad8d54;border-radius:5px;padding:9px 14px;font-size:12px;box-shadow:0 3px 15px #0008;min-height:42px}.sound-toggle[aria-pressed=true]{border-color:#34b998;color:#abebd5}.sound-status{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+:root{--amb:#dfbd77;--teal:#17d4a3;--red:#db302d;--pap:#e5d0a4;--ink:#f7f0df;--mut:#c4bba7;--line:#817458;--pin:#101719}
+body{background:#080c0d url('assets/desk.jpg') center/cover fixed;position:relative;isolation:isolate;font-size:17px;line-height:1.85}
+body:before{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(90deg,#070a0c66,#080c0c99 45%,#080c0c99),radial-gradient(ellipse at center,transparent 20%,#0009);pointer-events:none}
+.case-header{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;padding:19px 32px;border-bottom:1px solid #cfba7c24;font-size:12px;color:#d4c09b;letter-spacing:1px;background:#05090ac4;z-index:2}
+.case-header b{color:#a3342d;margin:0 8px}.screen{max-width:1050px;padding:100px 42px 65px;gap:22px;position:relative;min-height:100svh}
+h1{font-size:clamp(42px,6vw,78px);text-shadow:0 4px 14px #0009;font-weight:800}h2{color:#f6eddc;text-shadow:0 2px 8px #000;font-size:clamp(27px,3.5vw,41px)}
+.lbl{color:#e5c581;font-size:14px}.lead{font-size:19px}.stamp{border-radius:0;border:3px solid #c82c29;outline:1px solid #902422;outline-offset:4px;color:#ed3c36;padding:0 17px;box-shadow:inset 0 0 12px #db302d22;font-size:25px;text-shadow:1px 1px #0007;background:#110c0a38;max-width:max-content}
+.case-mark{position:absolute;left:42px;bottom:60px;font:11px Consolas,monospace;color:#b7a17d88;letter-spacing:4px;writing-mode:vertical-rl}
+#intro{max-width:960px;text-align:center;align-items:center}#intro .stamp{align-self:center;margin-bottom:8px}#intro .paper{background:none;border:0;box-shadow:none;color:#ddd3bf;padding:0;max-width:670px;font-size:18px}#intro .paper b{color:#dfbd77}#intro .btn{align-self:center;min-width:220px;margin-top:8px}
+.btn{border-radius:5px;background:linear-gradient(#bd3125,#7f1914);border:1px solid #ff6554;box-shadow:0 0 22px #e02c2822,inset 0 1px #ffb59144,0 5px 12px #0008;color:#fff0d6;padding:10px 25px;font-size:16px;transition:.15s}
+.btn:hover{filter:brightness(1.18);transform:translateY(-2px)}.btn:active{transform:translateY(1px);box-shadow:none}.btn.g{background:linear-gradient(#283033,#141b1d);border:1px solid #6f7774;color:#f1e8d4;border-radius:5px}
+.paper,.box{border-radius:2px;padding:25px 29px;background-color:#e1cda8;background-image:repeating-linear-gradient(0deg,#7048200c 0 1px,transparent 1px 4px),radial-gradient(ellipse at 20% 10%,#fff3d166,transparent 65%),linear-gradient(115deg,#c7ab77,#eddec1 22%,#ddc49a 90%,#c1a070);color:#26231d;box-shadow:2px 9px 25px #0009,inset 0 0 22px #79522240;border:1px solid #a78a5c;position:relative}
+.paper{border:0;border-inline-start:0;clip-path:polygon(0 1%,24% 0,48% 1%,75% 0,100% 1%,99.7% 97%,80% 99%,59% 98%,33% 100%,0 98%)}
+.paper b{color:#2c251a}.box .lbl{color:#7b371d}.box .note{color:#61543c}.box .btn.g{color:#f8ebd4}.note{color:#cfc1a4;font-size:13px}.res{background:#0a181a0d;border-radius:3px;font-size:15px}.res.good{color:#e7fff2;background:#063b2fe8;border:1px solid #0ecfa0}.res.bad{color:#fff1e2;background:#6d2520;border:1px solid #db5b4d}
+#print>h2{text-align:center}#print>.paper{transform:rotate(-.6deg);font-size:20px;padding:30px 45px}#clues{gap:23px;padding:0 15px}.clue{color:#292116;position:relative;background:linear-gradient(120deg,#e9cc88,#f5e0a5,#ddbd75);box-shadow:1px 5px 10px #0008;border:0;border-radius:0;padding:30px 22px 20px;transform:rotate(-2deg);min-height:132px}.clue:nth-child(2){transform:rotate(2deg)}.clue:before,.pin{content:"";position:absolute;top:8px;left:50%;width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#ff9386,#e01113 42%,#670609 80%);box-shadow:2px 5px 3px #0008;z-index:4}.clue .m{color:#3c3426}.clue[aria-expanded=true]{color:#242319;background:linear-gradient(120deg,#e2d6a1,#f3e4b9);border:0;outline:2px solid #55a68b}.clue b{font-size:20px}
+#board{max-width:1140px}#board>h2{text-align:center;background:linear-gradient(#372419,#1f140f);border:3px solid #59351f;box-shadow:0 4px 9px #000c;padding:14px;margin:0 12%;transform:rotate(-1deg)}#board>.box{background:#080f10b3;color:#e9d9b6;border:1px solid #7b6745;padding:13px 20px;font-size:14px;box-shadow:none}.bar{height:5px;background:#f2ddb826}.bar i{background:#cb4431}
+.evidence-board{position:relative;background:#9c703e url('assets/cork.jpg') repeat;border:13px solid #3c2617;outline:2px solid #a57442;box-shadow:inset 0 0 40px #251400cc,0 12px 35px #000b;padding:38px 30px 28px}.evidence-board .grid{grid-template-columns:repeat(3,minmax(0,1fr));position:relative;gap:35px}.strings{position:absolute;inset:15px 20px;pointer-events:none;z-index:3}.strings svg{width:100%;height:100%;overflow:visible}.strings path{fill:none;stroke:#a91e19;stroke-width:3;filter:drop-shadow(1px 3px 1px #0009)}
+.fold{background:#eadbb8;color:#221e16;border:0;border-radius:0;transform:rotate(3deg);padding:15px 12px 18px;box-shadow:3px 6px 8px #0009;text-align:center;min-width:0;isolation:isolate}.fold:nth-child(2){transform:rotate(-3deg)}.fold:nth-child(3){transform:rotate(2deg)}.fold:before{display:none}.fold img{display:block;width:100%;aspect-ratio:1.38;object-fit:cover;filter:contrast(1.08) saturate(.75);margin-bottom:10px}.fold small{display:none}.fold b{font-size:20px}.fold>span:not(.pin){font-size:13px}.fold .ok{color:#08784f}.fold.done{background:#e8d8b5;outline:2px solid #70a88b}.fold:hover{transform:translateY(-7px) rotate(0)}.board-hint{text-align:center;color:#f3dfb5}
+.evidence-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:35px;align-items:center}.evidence-layout>.box{grid-column:1;grid-row:1}.evidence-photo{grid-column:2;grid-row:1;margin:0;position:relative;background:#e4d4b4;padding:12px 12px 28px;transform:rotate(-5deg);box-shadow:4px 10px 25px #000b}.evidence-photo img{display:block;width:100%;height:270px;object-fit:cover}.evidence-photo figcaption{font-size:13px;color:#4d3a26;text-align:center;margin-top:10px}.evidence-photo .stamp{position:absolute;bottom:35px;right:-12px;transform:rotate(-13deg);white-space:nowrap;background:#22160bde}.opt{background:#142024;color:#f2ead9;border:1px solid #7c827c;border-radius:4px;font-size:15px;padding:9px 13px}.opt:hover{background:#214039}.opt:disabled{opacity:.7;cursor:default}#evW{background:#073d31;color:#eaffef;clip-path:none;border:1px solid #00bc8f}#evW b{color:#c8ffe6}
+#twist{max-width:950px}#twist>.paper{font-size:17px}#twist>.box{border:2px solid #9c7442;outline:5px solid #251a12;transform:rotate(-.5deg);padding:28px 35px}#twist>.box>p:nth-child(2){font-size:22px;font-weight:800;border-bottom:1px solid #8c7851;padding:14px 0 20px}.conf{max-width:330px;font-size:13px}.conf .bar{background:#7b482333}.conf .bar i{background:#a53428}.box .opt[data-q=v]{background:#08785b;border-color:#05c194}#tNext{background:#087258;border-color:#19d0a2}
+#notes h2{font-size:29px}#bc{gap:25px}#bc>.box{padding:40px 22px 25px;min-height:270px;transform:rotate(-2deg);border:6px double #96794f}#bc>.box:nth-child(2){transform:rotate(1deg)}#bc>.box:before{content:"";position:absolute;top:-14px;left:40%;width:65px;height:28px;background:#d2b986bb;transform:rotate(-9deg);box-shadow:0 1px 3px #0003}#bc b{display:block;text-align:center;border-bottom:1px solid #a58b63;padding-bottom:14px}#bc p{font-size:15px}
+#refs .box{transform:rotate(-.7deg)}#refs ul{list-style:none;padding:0!important;counter-reset:ref}#refs li{counter-increment:ref;border-bottom:1px dashed #8b7656;padding:8px 40px 14px 5px;margin:0 0 8px;position:relative;font-size:15px}#refs li:before{content:counter(ref);position:absolute;right:0;top:10px;background:#555e5c;color:white;width:27px;height:27px;border-radius:50%;text-align:center}#refs a{display:inline-block;color:#006379;font-size:13px;text-decoration-thickness:1px;max-width:100%;overflow-wrap:anywhere}
+body[data-scene=reveal]:before{background:#020b10e8}.identity-layout{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:center}.identity-layout>div{grid-column:1;grid-row:1}.identity-photo{grid-column:2;grid-row:1;margin:0;border:1px solid #1fb8da55;box-shadow:0 0 50px #03c6fb1a}.identity-photo img{display:block;width:100%;height:450px;object-fit:cover}.identity-layout h2{font-size:clamp(37px,4vw,54px);color:#e2faff;margin:25px 0 18px}.identity-layout .stamp{display:block}.identity-layout .lbl{margin-top:28px}.identity-layout .btn{margin-top:25px}.identity-layout p{color:#c4d5d8}.identity-layout .lead{font-size:19px}
+#end{max-width:900px}#end .stamp{color:#db302d!important;border-color:#db302d!important}#end h2{font-size:35px!important}#end .sum{background:#e6d7b9;gap:15px}#end .sum i{background:none;color:#245749;border:2px solid #245749;border-radius:3px;font-size:18px;width:23px;height:23px}#end #copy{background:#066c55;border-color:#27c19a}
+@media(min-width:1300px){.screen{min-height:100svh}#intro{padding-right:120px;padding-left:120px}}
+@media(max-width:700px){body{font-size:16px;background-position:32% center}.case-header{padding:13px 17px;font-size:10px}.screen{padding:83px 20px 40px;gap:19px}h2{font-size:28px}.paper,.box{padding:20px}.lead{font-size:17px}#print>.paper{padding:23px;font-size:17px}#clues{padding:0;gap:15px;grid-template-columns:1fr}.clue{min-height:95px;padding-top:25px}.clue b{font-size:18px}#board>h2{margin:0;font-size:28px}.evidence-board{padding:30px 12px 18px;border-width:8px}.evidence-board .grid{gap:12px;grid-template-columns:1fr}.fold{width:75%;margin:0 auto 15px;transform:rotate(3deg)}.fold:nth-child(2){transform:rotate(-3deg);margin-right:4%}.fold:nth-child(3){margin-left:4%}.fold img{aspect-ratio:1.8}.strings{inset:20px 12px}.strings path{stroke-width:5}.evidence-layout{grid-template-columns:1fr;gap:28px}.evidence-photo{grid-column:1;grid-row:1;width:70%;margin:auto}.evidence-photo img{height:190px}.evidence-layout>.box{grid-column:1;grid-row:2}.top h2{font-size:26px}.top .btn{font-size:13px}.identity-layout{grid-template-columns:1fr;gap:25px}.identity-photo{grid-column:1;grid-row:1;width:60%;margin:auto}.identity-photo img{height:240px;object-position:50% 20%}.identity-layout>div{grid-column:1;grid-row:2}.identity-layout h2{font-size:36px}#twist>.box{padding:20px}#twist>.box>p:nth-child(2){font-size:19px}#bc{grid-template-columns:1fr}#bc>.box{min-height:0}.btn{font-size:15px}.case-mark{display:none}#refs li{font-size:14px}#end .sum{font-size:15px}.row>.btn{flex:1}.stamp{font-size:23px}}
+
+</style>
+</head>
+<body data-scene="intro"><header class="case-header"><span>قسم التحقيقات <b> / </b> سرّي</span><span id="stageLabel">ملف القضية ٠٠١</span></header><button id="soundToggle" class="sound-toggle" aria-pressed="false" aria-label="تشغيل أصوات التحقيق">♫ تشغيل أصوات التحقيق</button><span id="soundStatus" class="sound-status" role="status"></span><noscript>يرجى تفعيل JavaScript لبدء التحقيق التفاعلي.</noscript>
+
+<main class="screen" id="intro">
+  <span class="stamp">سرّي للغاية</span><span class="case-mark" aria-hidden="true">EVIDENCE / 001</span>
+  <div class="lbl">ملف القضية رقم ٠٠١</div>
+  <h1 tabindex="-1">المشتبه به الخفي</h1>
+  <p class="paper lead"><b>التقرير:</b> شيء ما يعمل بصمت في تفاصيل الحياة اليومية؛ يتوقع ويرتّب وينبّه، ولا يظهر ولا يُسمّى. لا صورة له ولا اسم. المطلوب كشف هويته قبل إغلاق القضية.</p>
+  <button class="btn" data-go="print">بدء التحقيق <span aria-hidden="true">←</span></button>
+</main>
+
+<section class="screen" id="print" hidden>
+  <div class="lbl">بصمة المشتبه به · الذكاء الاصطناعي بكلماتي</div>
+  <h2 tabindex="-1">عين رقمية تلتقط ما نغفل عنه</h2>
+  <p class="paper lead"><b>ملاحظات المحقق:</b> أرى الذكاء الاصطناعي كعين رقمية تستطيع اكتشاف الأنماط التي قد لا نلاحظها بسهولة. يتعلم من البيانات، ويستخدم ما تعلمه لتحليل المعلومات وتقديم توقعات أو اقتراحات. لكنه ليس عقلًا بشريًا يعرف كل شيء؛ فقد يخطئ، وتبقى مسؤولية التفكير والتحقق واتخاذ القرار للإنسان.</p>
+  <div class="grid" id="clues">
+    <button class="clue" aria-expanded="false"><b>🔎 الأثر الأول</b><span class="m">يتعلم من أمثلة كثيرة بدل قواعد مكتوبة لكل حالة. مثال: ترى مئات الصور المصنّفة فتتعلم الفرق بينها.</span></button>
+    <button class="clue" aria-expanded="false"><b>🧩 الأثر الثاني</b><span class="m">يلتقط أنماطًا متكررة يصعب رصدها بسرعة، كازدحام يحدث كل صباح.</span></button>
+    <button class="clue" aria-expanded="false"><b>⚖️ الأثر الثالث</b><span class="m">يعطي توقعًا لا يقينًا، وقد يخطئ. لذلك القرار الأخير للإنسان.</span></button>
+  </div>
+  <div class="note" id="pHint">فتح الآثار الثلاثة يُظهر الخطوة التالية.</div>
+  <button class="btn" id="pNext" hidden data-go="board">الانتقال إلى لوحة الأدلة</button>
+</section>
+
+<section class="screen" id="board" hidden>
+  <div class="lbl">لوحة الأدلة · الذكاء الاصطناعي من حولنا</div>
+  <h2 tabindex="-1">ثلاثة ملفات، ثلاثة أماكن</h2>
+  <div class="box"><div id="cnt" style="font-weight:700">الأدلة المفحوصة: 0 من 3</div><div class="bar" role="progressbar" aria-label="الأدلة المفحوصة" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0" id="pb"><i></i></div></div>
+  <div class="evidence-board"><div class="strings" aria-hidden="true"><svg viewBox="0 0 1000 300" preserveAspectRatio="none"><path d="M160 35 L500 145 L840 35 M160 35 L500 35 L840 35"/></svg></div><div class="grid" id="folders"></div></div><p class="board-hint">افحص الأدلة الثلاثة لكشف هوية المشتبه به.</p>
+  <button class="btn" id="bNext" hidden data-go="twist">الانتقال إلى المفاجأة</button>
+</section>
+
+<section class="screen" id="ev" hidden>
+  <div class="top"><h2 tabindex="-1" id="evT"></h2><button class="btn g" data-go="board">العودة إلى لوحة الأدلة</button></div>
+  <div class="evidence-layout"><figure class="evidence-photo"><img id="evImg" alt=""><figcaption id="evCaption"></figcaption><span class="stamp" id="evStamp" hidden>تم التحقق</span></figure><div class="box"><p id="evI"></p>
+    <p class="lbl" style="margin-top:12px">فحص الدليل</p><p id="evQ" style="font-weight:700"></p>
+    <div class="row" id="evO" style="margin-top:8px;flex-direction:column"></div>
+    <p class="res" id="evR" aria-live="polite"></p>
+    <div class="note" id="evN" style="margin-top:10px"></div></div>
+  </div><div class="paper" id="evW" hidden><b>تم تسجيل الدليل!</b><br><button class="btn" style="margin-top:10px" data-go="board">العودة إلى لوحة الأدلة</button></div>
+</section>
+
+<section class="screen" id="twist" hidden>
+  <div class="lbl">المفاجأة · ما الذي أدهشني</div>
+  <span class="stamp">إفادة تبدو واثقة</span><h2 tabindex="-1">إفادة واثقة… لكن هل هي صحيحة؟</h2>
+  <p class="paper lead">أدهشني أن الذكاء الاصطناعي اللغوي قد يقدّم إجابة مرتبة وواثقة تتضمن مراجع لا وجود لها، لأنه يتنبأ بالكلام المحتمل وليس قاعدة معلومات مؤكدة. ثقة الأسلوب لا تعني صحة المعلومة.</p>
+  <div class="box"><p class="lbl">إفادة المشتبه به (مثال مُختلَق للتوضيح)</p>
+    <p>«وفق دراسة للدكتور خالد عام ٢٠١٨ في مجلة التقنية الذكية، فإن ٩١٪ من الأنظمة لا تخطئ.»</p>
+    <div class="conf"><small>درجة الثقة في الصياغة: عالية جدًا</small><div class="bar"><i></i></div></div>
+    <p><b>قرار المحقق؟</b></p>
+    <div class="row" style="margin-top:6px"><button class="opt" data-q="a">قبول الإفادة وتسجيلها</button><button class="opt" data-q="v">التحقق من المصدر الأصلي أولًا</button></div>
+    <p class="res" id="qR" aria-live="polite"></p>
+    <button class="btn g" id="retry" hidden style="margin-top:8px">إعادة القرار</button></div>
+  <button class="btn" id="tNext" hidden data-go="notes">الانتقال إلى ملاحظات سرية</button>
+</section>
+
+<section class="screen" id="notes" hidden>
+  <div class="lbl">ملاحظات سرية · How AI helped me</div>
+  <h2 tabindex="-1">من ساعد المحقق في صناعة هذا الملف؟</h2>
+  <div class="grid" id="bc"></div>
+  <button class="btn" data-go="refs">الانتقال إلى المصادر</button>
+</section>
+
+<section class="screen" id="refs" hidden>
+  <h2 tabindex="-1">ملفات الأدلة المرجعية</h2>
+  <div class="box"><ul style="padding-inline-start:20px">
+   <li><b>مفهوم تعلّم الآلة:</b> IBM Developer.<br><a href="https://www.ibm.com/think/topics/machine-learning" target="_blank" rel="noopener">IBM · Machine learning</a></li>
+   <li><b>توقّع المرور في الخرائط:</b> Google DeepMind — شرح توقّع حركة المرور بالتعلم الآلي.<br><a href="https://deepmind.google/blog/traffic-prediction-with-advanced-graph-neural-networks/" target="_blank" rel="noopener">Google DeepMind · Traffic prediction</a></li>
+   <li><b>المنظّمات الحرارية الذكية:</b> ENERGY STAR.<br><a href="https://www.energystar.gov/products/smart_thermostats" target="_blank" rel="noopener">energystar.gov/products/smart_thermostats</a></li>
+   <li><b>الأجهزة الطبية المعتمدة على الذكاء الاصطناعي:</b> U.S. FDA.<br><a href="https://www.fda.gov/medical-devices/artificial-intelligence-enabled-medical-devices/list-artificial-intelligence-enabled-medical-devices" target="_blank" rel="noopener">fda.gov/medical-devices/…/artificial-intelligence-enabled-medical-devices</a></li>
+   <li><b>حدود الذكاء الاصطناعي ومخاطره:</b> NIST — AI Risk Management Framework.<br><a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">nist.gov/itl/ai-risk-management-framework</a></li>
+  </ul></div>
+  <div class="note">أمثلة الفحص داخل التجربة مبسّطة لأغراض تعليمية.</div>
+  <button class="btn" data-go="reveal">كشف هوية المشتبه به ←</button>
+</section>
+
+<section class="screen" id="reveal" hidden>
+  <div class="identity-layout"><figure class="identity-photo"><img src="assets/identity.jpg" alt="وجه رقمي مضيء يرمز إلى الذكاء الاصطناعي"></figure><div><span class="stamp">كشف الهوية</span><p class="lbl">المشتبه به الخفي هو…</p><h2 tabindex="-1">الذكاء الاصطناعي</h2><p class="lead">تقنية تتعلم الأنماط من البيانات، وتستخدمها لتقديم توقعات واقتراحات في طرقنا ومنازلنا والرعاية الصحية.</p><p>إنه شريك يساعدنا على إنجاز المهام واتخاذ قرارات أفضل، وتبقى المراجعة والمسؤولية للإنسان.</p><button class="btn" data-go="end">إغلاق القضية ←</button></div></div>
+</section>
+<section class="screen" id="end" hidden>
+  <span class="stamp" style="border-color:var(--teal);color:var(--teal)">أُغلقت القضية</span>
+  <h2 tabindex="-1" style="font-size:clamp(28px,6.5vw,48px)">محضر إغلاق القضية</h2>
+  <p class="paper lead">اكتشفتُ أن الذكاء الاصطناعي ليس بطلًا خارقًا ولا شريرًا، بل شريك خفي يعمل في طرقنا وبيوتنا ومستشفياتنا، يتعلم من الأنماط ويساعد على القرار. لكنه قد يخطئ، ويبقى دوري أن أراجع وأتحقق وأقرر.</p>
+  <div class="box sum" id="sum"></div>
+  <div class="row"><button class="btn" id="copy">نسخ ملخص القضية</button><button class="btn g" id="again">فتح قضية جديدة (إعادة)</button></div>
+  <p class="res" id="cp" aria-live="polite"></p>
+</section>
+
+<script>
+/* ===== قسم قابل للتعديل: ملاحظات سرية (اجعله مطابقًا لما فعلته فعلًا) ===== */
+const BEHIND=[
+ {t:"ChatGPT",b:"ساعدني في تطوير الفكرة ومراجعة الشروط واقتراح التحسينات. وفي هذه النسخة استُخدم Codex لتعديل التصميم والبرمجة والتحقق، وتوليد خلفية المكتب."},
+ {t:"Claude",b:"استعنت به في إنشاء النسخة الأصلية من كود الموقع وبناء التفاعلات."},
+ {t:"مساهمتي الشخصية",b:"وجّهت فكرة التحقيق والأماكن الثلاثة، واخترت الصورة المرجعية والأجواء البوليسية، وطلبت الحفاظ على المحتوى والتفاعلات وشروط المهمة."}
+];
+/* ====================================================================== */
+const EV=[
+ {k:"maps",ic:"🗺️",t:"الدليل ١: تطبيق الخرائط",loc:"الطريق",
+  i:"تطبيقات الخرائط تجمع بين أنماط حركة المرور السابقة والحالة الحالية باستخدام التعلم الآلي، لتتوقع الازدحام وزمن الوصول.",
+  q:"الطريق يبدو سالكًا الآن، لكن التطبيق حذّر من ازدحام بعد نصف ساعة. كيف عرف؟",
+  o:[["قارن الوضع الحالي بأنماط مرور سابقة مشابهة",1],["مراقب بشري يتابع كل طريق لحظة بلحظة",0]],
+  ok:"أحسنت! التعلم من الأنماط السابقة مع البيانات الحية هو سر التوقع.",no:"ليس تمامًا؛ لا يوجد مراقب لكل طريق، بل نموذج يتعلم من أنماط البيانات.",
+  n:"محاكاة تعليمية مبسطة وليست بيانات مرور حقيقية."},
+ {k:"home",ic:"🏠",t:"الدليل ٢: المنزل الذكي",loc:"المنزل",
+  i:"بعض المنظّمات الحرارية الذكية يمكنها تعلّم تفضيلات الحرارة وأوقات وجودك لتضبط التشغيل وتقلل استهلاك الطاقة.",
+  q:"غرفة فارغة منذ ساعات، وخفّض النظام التبريد وحده. ما التفسير الأرجح؟",
+  o:[["تعلّم من الاستخدام السابق أن الغرفة غير مستخدمة الآن",1],["تعطّل الجهاز وتوقف عن العمل",0]],
+  ok:"صحيح! التكييف الذكي يلتقط نمط الاستخدام ويضبط التشغيل.",no:"قد تحدث الأعطال، لكن التفسير الأرجح هنا أن النظام لاحظ نمط الاستخدام.",
+  n:"هذه محاكاة مبسطة لسلوك نظام ذكي، وليست تشغيلًا حقيقيًا لجهاز."},
+ {k:"hosp",ic:"🏥",t:"الدليل ٣: المستشفى",loc:"المستشفى",
+  i:"يمكن لبعض أنظمة الذكاء الاصطناعي تحليل الصور الطبية والمساعدة في تحديد مناطق قد تحتاج إلى مراجعة الطبيب. وهي أدوات مساعدة وليست بديلًا عن التشخيص المتخصص.",
+  q:"أشار نظام إلى منطقة في صورة أشعة. من يقرر التشخيص؟",
+  o:[["النظام وحده دون أي مراجعة",0],["الطبيب، مع بقية المعلومات الطبية عن الحالة",1]],
+  ok:"بالضبط! النظام يلفت الانتباه والطبيب يقيّم ويقرر.",no:"لا، النظام أداة مساعدة فقط، والتشخيص مسؤولية الطبيب المختص.",
+  n:"تجربة تعليمية لا توحي بتحليل أو تشخيص طبي حقيقي."}
+];
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let done={maps:0,home:0,hosp:0},cur=0,verified=false;
+try{const stored=JSON.parse(sessionStorage.getItem("cf-noir-v2")||"{}");Object.keys(done).forEach(k=>done[k]=stored[k]===1?1:0)}catch(e){}
+const save=()=>{try{sessionStorage.setItem("cf-noir-v2",JSON.stringify(done))}catch(e){}};
+const count=()=>Object.values(done).filter(Boolean).length;
+function go(id){
+  if(["twist","notes","refs","reveal","end"].includes(id)&&count()<3)id="board";
+  if(["notes","refs","reveal","end"].includes(id)&&!verified)id="twist";
+  document.body.dataset.scene=id;
+  $("#stageLabel").textContent=({intro:"ملف القضية ٠٠١",print:"٠١ / ملاحظات المحقق",board:"٠٢ / لوحة الأدلة",ev:"٠٢ / فحص الأدلة",twist:"٠٣ / إفادة مضللة",notes:"٠٤ / خلف الكواليس",refs:"٠٥ / المصادر",reveal:"٠٦ / كشف الهوية",end:"اكتمل التحقيق"})[id];
+  $$(".screen").forEach(s=>s.hidden=s.id!==id);scrollTo(0,0);
+  if(id==="board")renderBoard();if(id==="end")renderEnd();
+  const h=$("#"+id).querySelector("h1,h2");if(h)h.focus({preventScroll:true});
+}
+function renderBoard(){
+  const n=count();$("#cnt").textContent="الأدلة المفحوصة: "+n+" من 3";
+  $("#pb i").style.width=(n/3*100)+"%";$("#pb").setAttribute("aria-valuenow",n);
+  $("#folders").innerHTML=EV.map((e,i)=>'<button class="fold'+(done[e.k]?" done":"")+'" data-ev="'+i+'"><span class="pin" aria-hidden="true"></span><img src="assets/'+e.k+'.jpg" alt=""><small>'+e.loc+'</small><b>'+e.t.split(": ")[1]+'</b>'+(done[e.k]?'<span class="ok">✓ تم الفحص</span>':'<span>فتح الملف</span>')+'</button>').join("");
+  $("#bNext").hidden=n<3;
+}
+function openEv(i){
+  cur=i;const e=EV[i];
+  $("#evImg").src="assets/"+e.k+".jpg";$("#evImg").alt="صورة توضيحية: "+e.loc;$("#evCaption").textContent="دليل رقم ٠"+(i+1)+" / "+e.loc;$("#evStamp").hidden=!done[e.k];
+  $("#evT").textContent=e.t;$("#evI").textContent=e.i;$("#evQ").textContent=e.q;$("#evN").textContent=e.n;
+  $("#evR").textContent="";$("#evR").className="res";$("#evW").hidden=!done[e.k];
+  $("#evO").innerHTML=e.o.map((o,j)=>'<button class="opt" data-o="'+j+'">'+o[0]+'</button>').join("");go("ev");
+}
+function renderEnd(){$("#sum").innerHTML=EV.map(e=>'<div><i>✓</i>'+e.ic+" "+e.loc+": "+e.t.split(": ")[1]+'</div>').join("")}
+document.addEventListener("click",e=>{
+  const g=e.target.closest("[data-go]");if(g){go(g.dataset.go);return}
+  const f=e.target.closest("[data-ev]");if(f){openEv(+f.dataset.ev);return}
+  const o=e.target.closest("[data-o]");if(o){
+    const ev=EV[cur],good=ev.o[+o.dataset.o][1],r=$("#evR");
+    r.textContent=good?ev.ok:ev.no;r.className="res "+(good?"good":"bad");
+    if(good){done[ev.k]=1;save();$("#evW").hidden=false;$("#evStamp").hidden=false}
+  }
+});
+/* بصمة */
+$$("#clues .clue").forEach(c=>c.onclick=()=>{c.setAttribute("aria-expanded","true");
+  if($$("#clues [aria-expanded=true]").length===3){$("#pNext").hidden=false;$("#pHint").hidden=true}});
+/* المفاجأة */
+$$("[data-q]").forEach(b=>b.onclick=()=>{
+  if(b.dataset.q==="v"){verified=true;$("#qR").textContent="قرار محقق محترف! قد تُنتج النماذج مراجع تبدو حقيقية وهي مختلقة، والتحقق من المصدر الأصلي يحمي من الخطأ.";$("#qR").className="res good";$("#tNext").hidden=false;$("#retry").hidden=true}
+  else{verified=false;$("#tNext").hidden=true;$("#qR").textContent="الصياغة مقنعة، وهنا الفخ! ثقة الأسلوب لا تعني صحة المعلومة، ولا دليل على وجود هذه الدراسة. جرّب قرارًا آخر.";$("#qR").className="res bad";$("#retry").hidden=false}
+});
+$("#retry").onclick=()=>{verified=false;$("#tNext").hidden=true;$("#qR").textContent="";$("#qR").className="res";$("#retry").hidden=true};
+$("#bc").innerHTML=BEHIND.map(c=>'<div class="box"><b style="font-size:20px">'+c.t+'</b><p style="margin-top:6px">'+c.b+'</p></div>').join("");
+$("#copy").onclick=async()=>{
+  const t="ملخص القضية: المشتبه به الخفي = الذكاء الاصطناعي\n"+EV.map(e=>"✓ "+e.loc).join("\n")+"\nالخلاصة: يتعلم من الأنماط ويساعد على القرار، لكن قد يخطئ ويبقى التحقق مسؤوليتي.";
+  try{await navigator.clipboard.writeText(t);$("#cp").textContent="تم النسخ ✓"}catch(e){$("#cp").textContent=t}
+  $("#cp").className="res good"};
+$("#again").onclick=()=>{done={maps:0,home:0,hosp:0};verified=false;save();
+  $$("#clues .clue").forEach(c=>c.setAttribute("aria-expanded","false"));$("#pNext").hidden=true;$("#pHint").hidden=false;
+  $("#qR").textContent="";$("#qR").className="res";$("#tNext").hidden=true;$("#retry").hidden=true;$("#cp").textContent="";$("#cp").className="res";go("intro")};
+
+// Original procedural soundscape: no downloads or external audio services.
+(()=>{
+ let ctx=null,master=null,ambient=null,enabled=false,voices=[];
+ const toggle=document.querySelector('#soundToggle');
+ const status=document.querySelector('#soundStatus');
+ // A 24-second noir score: bass ostinato, ticking clock, radio static.
+ // Render once into a seamless loop so background tabs cannot accumulate timers.
+ function investigationLoop(){
+  const sr=ctx.sampleRate,seconds=24,len=sr*seconds,buffer=ctx.createBuffer(1,len,sr),d=buffer.getChannelData(0);
+  let seed=1701;const noise=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/2147483648-1;};
+  const add=(at,duration,fn)=>{const start=Math.round(at*sr),n=Math.round(duration*sr);for(let j=0;j<n&&start+j<len;j++)d[start+j]+=fn(j/sr,j/n);};
+  // Low, unsettled room tone, gently breathing rather than a sustained chord.
+  for(let i=0;i<len;i++){const t=i/sr,fade=Math.min(1,t/1.5,(seconds-t)/1.5);d[i]=fade*(Math.sin(2*Math.PI*48*t)*.018+Math.sin(2*Math.PI*49*t)*.009)*( .7+.3*Math.sin(2*Math.PI*t/8));}
+  const notes=[73.416,73.416,77.782,65.406,73.416,73.416,58.27,69.296];
+  for(let beat=0;beat<32;beat++){
+   const at=beat*.75,f=notes[beat%notes.length];
+   add(at,.52,(t,p)=>Math.sin(2*Math.PI*(f*t+1.1*(1-Math.exp(-t*18))))*Math.sin(Math.min(1,t/.015)*Math.PI/2)*Math.exp(-t*10)*.19);
+   // A wooden clock tick, with a deeper alternating tock.
+   add(at+.36,.045,(t)=>Math.exp(-t*115)*(noise()*.045+Math.sin(2*Math.PI*(beat%2?1250:1800)*t)*.035));
+   if(beat%4===0)add(at,.7,(t)=>Math.sin(2*Math.PI*(42*t+.65*(1-Math.exp(-t*25))))*(1-Math.exp(-t*90))*Math.exp(-t*7)*.16);
+  }
+  // Sparse minor-key piano-like clues, descending into uncertainty.
+  [ [3,293.665],[4.5,277.183],[9,220],[10.5,207.652],[15,293.665],[16.5,261.626],[21,220] ].forEach(([at,f])=>{
+   add(at,2,(t)=>{const a=(1-Math.exp(-t*150))*Math.exp(-t*2.8);return a*(Math.sin(2*Math.PI*f*t)*.036+Math.sin(2*Math.PI*f*2.003*t)*.012+Math.sin(2*Math.PI*f*3.01*t)*.004);});
+   add(at+.23,1.7,(t)=>Math.sin(2*Math.PI*f*t)*Math.exp(-t*3)*.009);
+  });
+  [6.3,18.3].forEach(at=>{
+   add(at,.28,(t,p)=>noise()*.033*Math.sin(Math.PI*p)*( .6+.4*Math.sin(2*Math.PI*37*t)));
+   add(at+.04,.07,t=>Math.sin(2*Math.PI*1450*t)*Math.exp(-t*45)*.025);
+  });
+  const source=ctx.createBufferSource();source.buffer=buffer;source.loop=true;source.connect(ambient);source.start();
+ }
+ function update(){toggle.setAttribute('aria-pressed',String(enabled));toggle.textContent=enabled?'♫ كتم أصوات التحقيق':'♫ تشغيل أصوات التحقيق';toggle.setAttribute('aria-label',enabled?'كتم أصوات التحقيق':'تشغيل أصوات التحقيق');}
+ function tone(freq,start,duration,volume,type='sine'){
+  if(!enabled||!ctx||ctx.state!=='running')return;
+  const o=ctx.createOscillator(),g=ctx.createGain(),t=ctx.currentTime+start;
+  o.type=type;o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(volume,t+.025);g.gain.exponentialRampToValueAtTime(.0001,t+duration);
+  o.connect(g);g.connect(master);o.start(t);o.stop(t+duration+.05);voices.push(o);o.onended=()=>{o.disconnect();g.disconnect();voices=voices.filter(v=>v!==o);};
+ }
+ function rustle(){
+  if(!enabled||ctx?.state!=='running')return;
+  const len=Math.floor(ctx.sampleRate*.16),b=ctx.createBuffer(1,len,ctx.sampleRate),d=b.getChannelData(0);
+  for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.sin(Math.PI*i/len)*.2;
+  const n=ctx.createBufferSource(),f=ctx.createBiquadFilter(),g=ctx.createGain();n.buffer=b;f.type='highpass';f.frequency.value=950;g.gain.value=.22;n.connect(f);f.connect(g);g.connect(master);n.start();voices.push(n);n.onended=()=>{n.disconnect();f.disconnect();g.disconnect();voices=voices.filter(v=>v!==n);};
+ }
+ function cue(kind){
+  if(kind==='reveal'){tone(58.27,0,2.4,.4,'triangle');tone(146.83,.08,1.7,.15);tone(155.56,.16,1.9,.09);rustle();}
+  else if(kind==='good'){tone(110,0,.12,.3,'triangle');tone(220,.07,.25,.1);rustle();}
+  else if(kind==='bad'){tone(146.83,0,.3,.18,'triangle');tone(138.59,.15,.4,.15,'triangle');}
+  else if(kind==='close'){tone(73.42,0,1.3,.3,'triangle');tone(146.83,.12,1.1,.12);rustle();}
+  else rustle();
+ }
+ async function setSound(on){
+  if(!on){enabled=false;update();if(master)master.gain.setValueAtTime(0,ctx.currentTime);for(const v of [...voices]){try{v.stop()}catch{}}voices=[];if(ctx&&ctx.state==='running')await ctx.suspend();return;}
+  try{
+   if(!ctx){const AC=globalThis.AudioContext||globalThis.webkitAudioContext;if(!AC)throw Error('unsupported');ctx=new AC();master=ctx.createGain();master.gain.value=0;master.connect(ctx.destination);
+    ambient=ctx.createGain();ambient.gain.value=.72;ambient.connect(master);investigationLoop();
+   }
+   await ctx.resume();enabled=true;master.gain.setValueAtTime(.28,ctx.currentTime);update();status.textContent='تم تشغيل أصوات التحقيق';cue('file');
+  }catch{enabled=false;update();status.textContent='تعذّر تشغيل الصوت في هذا المتصفح. يمكنك متابعة التحقيق.';}
+ }
+ toggle.onclick=()=>setSound(!enabled);
+ document.addEventListener('click',e=>{
+  if(!enabled)return;
+  const b=e.target.closest('button');if(!b||b===toggle)return;
+  if(b.dataset.go==='reveal')cue('reveal');
+  else if(b.dataset.go==='end')cue('close');
+  else if(b.dataset.o!==undefined)cue(EV[cur].o[+b.dataset.o][1]?'good':'bad');
+  else if(b.dataset.q)cue(b.dataset.q==='v'?'good':'bad');
+  else cue('file');
+ });
+ document.addEventListener('visibilitychange',()=>{if(!ctx||!enabled)return;if(document.hidden)ctx.suspend().catch(()=>{});else ctx.resume().catch(()=>{});});
+})();
+
+</script>
+</body>
+</html>
